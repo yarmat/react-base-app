@@ -1,5 +1,7 @@
 import React from "react";
 import {IRoute} from "./index";
+import { Navigate} from 'react-router-dom';
+import {DashboardRouteNames} from "./dashboard";
 
 const Layout = React.lazy(() => import("../pages/auth/Layout"));
 const Login = React.lazy(() => import("../pages/auth/Login"));
@@ -10,12 +12,12 @@ export enum AuthRouteNames {
     REGISTER = '/auth/register'
 }
 
-export const routes: IRoute[] = [
+export const routes = (isAuth: boolean): IRoute[] => [
     {
-        element: Layout,
+        element: isAuth ? <Navigate to={DashboardRouteNames.TASK} /> : <Layout />,
         children: [
-            { path: AuthRouteNames.LOGIN, element: Login },
-            { path: AuthRouteNames.REGISTER, element: Register },
+            { path: AuthRouteNames.LOGIN, element: <Login /> },
+            { path: AuthRouteNames.REGISTER, element: <Register /> },
         ]
     }
 ]

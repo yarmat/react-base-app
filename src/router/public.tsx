@@ -11,10 +11,10 @@ export enum PublicRouteNames {
 export const routes: IRoute[] = [
     {
         path: PublicRouteNames.MAIN,
-        element: Main
+        element: <Main />
     },
     {
         path: '*',
-        element: NotFound
+        element: <NotFound />
     }
 ]
