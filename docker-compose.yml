@@ -8,3 +8,22 @@ services:
             - ./:/app
         user:
             "1000:1000"
+    node-server:
+        build:
+            context: docker
+            dockerfile: development/node/Dockerfile
+        volumes:
+            - ./:/app
+        ports:
+            - "3000:3000"
+        command:
+            - "npm"
+            - "start"
+    json-server:
+        build:
+            context: docker
+            dockerfile: development/json-server/Dockerfile
+        volumes:
+            - ./docker/development/json-server:/app
+        ports:
+            - "3001:3001"

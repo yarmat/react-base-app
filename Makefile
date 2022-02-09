@@ -1,7 +1,4 @@
-init: docker-down-clear docker-pull docker-build docker-up node-install node-start
-
-docker-up:
-	docker-compose up -d
+init: docker-down-clear docker-pull docker-build node-install json-server-start node-server-start
 
 docker-down:
 	docker-compose down --remove-orphans
@@ -18,11 +15,14 @@ docker-pull:
 node-install:
 	docker-compose run --rm node npm install
 
-node-start:
-	docker-compose run -p 3000:3000 --rm node npm start
-
 node-build:
 	docker-compose run --rm node npm build
+
+node-server-start:
+	docker-compose up node-server
+
+json-server-start:
+	docker-compose up -d json-server
 
 nodec:
 	docker-compose run --rm node ${c}
