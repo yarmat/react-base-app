@@ -1,9 +1,10 @@
 import React, {FC} from 'react';
 import {Routes, Route} from 'react-router-dom';
 import {routes as generateRoutes} from "../router";
+import {useTypedSelector} from "../hooks/useTypedSelector";
 
 const AppRouter: FC = () => {
-    const isAuth = true;
+    const {isAuth} = useTypedSelector(state => state.auth);
     const routes = generateRoutes(isAuth);
 
     return (

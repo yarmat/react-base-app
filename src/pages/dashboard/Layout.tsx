@@ -10,9 +10,13 @@ import {
 import { LogoutOutlined } from '@ant-design/icons';
 import {DashboardRouteNames} from "../../router/dashboard";
 import {PublicRouteNames} from "../../router/public";
+import {useActions} from "../../hooks/useActions";
 
 const Layout: FC = () => {
     const location = useLocation();
+    const {logoutActionCreator} = useActions();
+
+    const logout = () => logoutActionCreator();
 
     return (
         <BaseLayout className="h-100">
@@ -28,7 +32,7 @@ const Layout: FC = () => {
                         </Menu>
                     </Col>
                     <Col>
-                        <Button type="primary" icon={<LogoutOutlined />} size="middle" />
+                        <Button onClick={logout} type="primary" icon={<LogoutOutlined />} size="middle" />
                     </Col>
                 </Row>
             </BaseLayout.Header>

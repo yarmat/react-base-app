@@ -1,6 +1,6 @@
 {
     "users": [
-        { "id":  1, "username":  "admin", "password":  "password" }
+        { "id":  1, "username": "admin", "first_name":  "Vlad", "last_name": "Minaev", "password":  "password" }
     ],
     "tasks": [
         { "id": 1, "name": "Task", "user_id": 1 }
