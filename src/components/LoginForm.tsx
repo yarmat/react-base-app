@@ -1,38 +1,39 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {Form, Input, Button, Alert} from "antd";
-import {required} from "../../utils/rules";
-import {useTypedSelector} from "../../hooks/useTypedSelector";
-import {useActions} from "../../hooks/useActions";
+import {required} from "../utils/rules";
+import {useTypedSelector} from "../hooks/useTypedSelector";
+import {useActions} from "../hooks/useActions";
+import {useInput} from '../hooks/useInput';
 
 const LoginForm: FC = () => {
     const {isLoading, error} = useTypedSelector(state => state.auth);
+    const {login} = useActions();
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const usernameInput = useInput();
+    const passwordInput = useInput();
 
-    const {loginActionCreator} = useActions();
-    const submitForm = () => loginActionCreator(username, password);
+    const onSubmit = () => login(usernameInput.value, passwordInput.value);
 
     return (
         <>
             {error && <Alert style={{marginBottom: 15}} message={error} type="error" />}
             <Form
                 layout="vertical"
-                onFinish={submitForm}
+                onFinish={onSubmit}
             >
                 <Form.Item
                     label="Username"
                     name="username"
                     rules={[required('Please input your username!')]}
                 >
-                    <Input value={username} onChange={e => setUsername(e.target.value)} />
+                    <Input {...usernameInput} />
                 </Form.Item>
                 <Form.Item
                     label="Password"
                     name="password"
                     rules={[required('Please input your password!')]}
                 >
-                    <Input.Password onChange={e => setPassword(e.target.value)} />
+                    <Input.Password {...passwordInput} />
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" block loading={isLoading}>

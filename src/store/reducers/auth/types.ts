@@ -12,7 +12,13 @@ export enum AuthActionEnum {
     SET_USER = 'SET_USER',
     SET_IS_LOADING = 'SET_IS_LOADING',
     SET_ERROR = 'SET_ERROR'
+}
 
+export interface RegisterData {
+    username: string,
+    first_name: string,
+    last_name: string,
+    password: string
 }
 
 export interface SetIsAuthAction {

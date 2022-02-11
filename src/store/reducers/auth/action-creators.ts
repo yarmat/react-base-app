@@ -1,55 +1,72 @@
 import IUser from "../../../models/IUser";
-import {AuthActionEnum, SetErrorAction, SetIsAuthAction, SetIsLoadingAction, SetUserAction} from "./types";
+import {
+    AuthActionEnum,
+    RegisterData,
+    SetErrorAction,
+    SetIsAuthAction,
+    SetIsLoadingAction,
+    SetUserAction
+} from "./types";
 import {AppDispatch} from "../../index";
-import axios from 'axios';
+import AuthApiService, {RegisterApiPayload} from "../../../api/auth";
 
-export const setUserActionCreator = (user: IUser): SetUserAction => ({type: AuthActionEnum.SET_USER, payload: user});
-export const setIsAuthActionCreator = (isAuth: boolean): SetIsAuthAction => ({
+export const setUserAuth = (user: IUser): SetUserAction => ({type: AuthActionEnum.SET_USER, payload: user});
+export const setIsAuth = (isAuth: boolean): SetIsAuthAction => ({
     type: AuthActionEnum.SET_IS_AUTH,
     payload: isAuth
 });
-export const setIsLoadingActionCreator = (isLoading: boolean): SetIsLoadingAction => ({
+export const setIsLoadingAuth = (isLoading: boolean): SetIsLoadingAction => ({
     type: AuthActionEnum.SET_IS_LOADING,
     payload: isLoading
 });
-export const setErrorActionCreator = (error: string): SetErrorAction => ({
+export const setErrorAuth = (error: string): SetErrorAction => ({
     type: AuthActionEnum.SET_ERROR,
     payload: error
 });
 
-export const loginActionCreator = (username: string, password: string) => async (dispatch: AppDispatch) => {
+export const login = (username: string, password: string) => async (dispatch: AppDispatch) => {
     try {
-        dispatch(setIsLoadingActionCreator(true));
-        dispatch(setErrorActionCreator(''));
-        const response = await axios.get<IUser[]>(`http://localhost:3001/users?username=${username}`);
-        const user = response.data.find(item => item.username === username && item.password === password);
-        if (user) {
-            localStorage.setItem('isAuth', 'true');
-            localStorage.setItem('user', JSON.stringify({...user, password: ''}));
-            dispatch(setUserActionCreator(user));
-            dispatch(setIsAuthActionCreator(true));
-        } else {
-            dispatch(setErrorActionCreator('User or password is incorrect.'));
-        }
-    } catch (e) {
-        dispatch(setErrorActionCreator('Something went wrong.'));
+        dispatch(setIsLoadingAuth(true));
+        dispatch(setErrorAuth(''));
+        const user = await AuthApiService.login(username, password);
+        localStorage.setItem('isAuth', 'true');
+        localStorage.setItem('user', JSON.stringify({...user, password: ''}));
+        dispatch(setUserAuth(user));
+        dispatch(setIsAuth(true));
+    } catch (e: any) {
+        dispatch(setErrorAuth(e.message));
     } finally {
-        dispatch(setIsLoadingActionCreator(false));
+        dispatch(setIsLoadingAuth(false));
     }
 }
 
-export const logoutActionCreator = () => async (dispatch: AppDispatch) => {
-    localStorage.removeItem('isAuth');
-    localStorage.removeItem('user');
-    dispatch(setIsAuthActionCreator(false));
-    dispatch(setUserActionCreator({} as IUser));
+
+export const register = (data: RegisterData) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(setIsLoadingAuth(true));
+        dispatch(setErrorAuth(''));
+
+        const user = await AuthApiService.register({
+            username: data.username,
+            first_name: data.first_name,
+            last_name: data.last_name,
+            password: data.password
+        } as RegisterApiPayload);
+
+        localStorage.setItem('isAuth', 'true');
+        localStorage.setItem('user', JSON.stringify({...user, password: ''}));
+        dispatch(setUserAuth(user));
+        dispatch(setIsAuth(true));
+    } catch (e: any) {
+        dispatch(setErrorAuth(e.message));
+    } finally {
+        dispatch(setIsLoadingAuth(false));
+    }
 }
 
-export default {
-    setUserActionCreator,
-    setIsAuthActionCreator,
-    setIsLoadingActionCreator,
-    setErrorActionCreator,
-    loginActionCreator,
-    logoutActionCreator
+export const logout = () => async (dispatch: AppDispatch) => {
+    localStorage.removeItem('isAuth');
+    localStorage.removeItem('user');
+    dispatch(setIsAuth(false));
+    dispatch(setUserAuth({} as IUser));
 }

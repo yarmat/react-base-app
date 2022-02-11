@@ -6,13 +6,13 @@ import {useActions} from "./hooks/useActions";
 import IUser from "./models/IUser";
 
 function App() {
-    const {setUserActionCreator, setIsAuthActionCreator} = useActions();
+    const {setUserAuth, setIsAuth} = useActions();
 
     useEffect(() => {
         if (localStorage.getItem('isAuth')) {
-            setIsAuthActionCreator(true);
+            setIsAuth(true);
             const user = JSON.parse(localStorage.getItem('user') as string) as IUser;
-            setUserActionCreator(user);
+            setUserAuth(user);
         }
     }, [])
 
