@@ -3,8 +3,8 @@ import {IRoute} from "./index";
 import {Navigate} from "react-router-dom";
 import {AuthRouteNames} from "./auth";
 
-const Layout = React.lazy(() => import("../pages/dashboard/Layout"));
-const Task = React.lazy(() => import("../pages/dashboard/Task"));
+const Layout = React.lazy(() => import("../pages/Dashboard/Layout"));
+const Task = React.lazy(() => import("../pages/Dashboard/Task"));
 
 
 export enum DashboardRouteNames {

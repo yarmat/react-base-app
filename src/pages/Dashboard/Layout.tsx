@@ -4,7 +4,7 @@ import {
     Layout as BaseLayout
 } from "antd";
 import DashboardHeader from "../../components/Dashboard/Header";
-import DashboardFooter from "../../components/Dashboard/Footer";
+import DashboardFooter from "../../components/Footer";
 
 
 const Layout: FC = () => {
@@ -13,7 +13,7 @@ const Layout: FC = () => {
             <BaseLayout.Header>
                 <DashboardHeader />
             </BaseLayout.Header>
-            <BaseLayout.Content className="dashboard-content">
+            <BaseLayout.Content className="content-section">
                 <Outlet/>
             </BaseLayout.Content>
             <BaseLayout.Footer>

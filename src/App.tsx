@@ -14,6 +14,7 @@ function App() {
             const user = JSON.parse(localStorage.getItem('user') as string) as IUser;
             setUserAuth(user);
         }
+        // eslint-disable-next-line
     }, [])
 
     return (

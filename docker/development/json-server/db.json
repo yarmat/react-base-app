@@ -13,6 +13,13 @@
       "last_name": "test",
       "password": "password",
       "id": 2
+    },
+    {
+      "username": "vladi",
+      "first_name": "Vlad",
+      "last_name": "Ignatov",
+      "password": "password",
+      "id": 3
     }
   ],
   "tasks": [

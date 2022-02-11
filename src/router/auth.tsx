@@ -3,9 +3,9 @@ import {IRoute} from "./index";
 import { Navigate} from 'react-router-dom';
 import {DashboardRouteNames} from "./dashboard";
 
-const Layout = React.lazy(() => import("../pages/auth/Layout"));
-const Login = React.lazy(() => import("../pages/auth/Login"));
-const Register = React.lazy(() => import("../pages/auth/Register"));
+const Layout = React.lazy(() => import("../pages/Auth/Layout"));
+const Login = React.lazy(() => import("../pages/Auth/Login"));
+const Register = React.lazy(() => import("../pages/Auth/Register"));
 
 export enum AuthRouteNames {
     LOGIN = '/auth/login',
