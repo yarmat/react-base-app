@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "first_name": "Admin",
+      "last_name": "Admin",
+      "password": "password"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Task",
+      "user_id": 1
+    }
+  ]
+}

@@ -3,7 +3,7 @@ services:
     node:
         build:
             context: docker
-            dockerfile: development/node/Dockerfile
+            dockerfile: node/Dockerfile
         volumes:
             - ./:/app
         user:
@@ -11,19 +11,20 @@ services:
     node-server:
         build:
             context: docker
-            dockerfile: development/node/Dockerfile
+            dockerfile: node/Dockerfile
         volumes:
             - ./:/app
         ports:
             - "3000:3000"
         command:
             - "npm"
+            - "run"
             - "start"
     json-server:
         build:
             context: docker
-            dockerfile: development/json-server/Dockerfile
+            dockerfile: json-server/Dockerfile
         volumes:
-            - ./docker/development/json-server:/app
+            - ./docker/json-server:/app
         ports:
             - "3001:3001"
