@@ -3,9 +3,8 @@ import {Outlet} from 'react-router-dom';
 import {
     Layout as BaseLayout
 } from "antd";
-import DashboardHeader from "../../components/Dashboard/Header";
-import DashboardFooter from "../../components/Footer";
-
+import DashboardHeader from "../../components/DashboardHeader";
+import Footer from "../../components/Footer";
 
 const Layout: FC = () => {
     return (
@@ -17,7 +16,7 @@ const Layout: FC = () => {
                 <Outlet/>
             </BaseLayout.Content>
             <BaseLayout.Footer>
-                <DashboardFooter />
+                <Footer />
             </BaseLayout.Footer>
         </BaseLayout>
     );

@@ -1,12 +1,14 @@
 import React, {FC} from 'react';
 import {Button, Col, Menu, Row} from "antd";
-import {PublicRouteNames} from "../../router/public";
+import {PublicRouteNames} from "../router/public";
 import {Link, useLocation} from "react-router-dom";
-import {DashboardRouteNames} from "../../router/dashboard";
+import {DashboardRouteNames} from "../router/dashboard";
 import {LogoutOutlined} from "@ant-design/icons";
-import {useActions} from "../../hooks/useActions";
+import {useActions} from "../hooks/useActions";
+import {useTypedSelector} from "../hooks/useTypedSelector";
 
 const DashboardHeader: FC = () => {
+    const {user} = useTypedSelector(state => state.auth);
     const location = useLocation();
     const {logout} = useActions();
 
@@ -22,6 +24,7 @@ const DashboardHeader: FC = () => {
                 </Menu>
             </Col>
             <Col>
+                <span style={{color: 'white', marginRight: '15px'}}>{ user.first_name } { user.last_name }</span>
                 <Button onClick={logout} type="primary" icon={<LogoutOutlined />} size="middle" />
             </Col>
         </Row>

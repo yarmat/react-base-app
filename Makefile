@@ -16,6 +16,9 @@ docker-pull:
 node-install:
 	docker-compose run --rm node npm install
 
+node-update:
+	docker-compose run --rm node npm update --save
+
 node-build:
 	docker-compose run --rm node npm run build
 
