@@ -1,4 +1,6 @@
-import {TaskAction, TaskActionEnum, TaskState} from "./types";
+import {SetTasksActionPayload, TaskState} from "./types";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import ITask from "../../../models/ITask";
 
 const initialState: TaskState = {
     isLoading: false,
@@ -12,23 +14,32 @@ const initialState: TaskState = {
     sort: []
 }
 
-export default function taskReducer(state = initialState, action: TaskAction): TaskState {
-    switch (action.type) {
-        case TaskActionEnum.SET_IS_LOADING:
+export const taskSlice = createSlice({
+    name: 'task',
+    initialState,
+    reducers: {
+        setIsLoading(state, action: PayloadAction<boolean>) {
             if (action.payload) {
-                return {...state, isLoading: action.payload, error: ''}
-            } else {
-                return {...state, isLoading: action.payload}
+                state.error = '';
             }
-        case TaskActionEnum.SET_ERROR:
-            return {...state, error: action.payload}
-        case TaskActionEnum.SET_TASKS:
-            return {...state, tasks: action.payload.tasks, pagination: action.payload.pagination, sort: action.payload.sort}
-        case TaskActionEnum.UPDATE_TASK:
-            return {...state, tasks: state.tasks.map(t => t.id === action.payload.id ? action.payload : t)}
-        case TaskActionEnum.DELETE_TASK:
-            return {...state, tasks: state.tasks.filter(t => t.id !== action.payload.id)}
-        default:
-            return state;
+
+            state.isLoading = action.payload;
+        },
+        setError(state, action: PayloadAction<string>) {
+            state.error = action.payload;
+        },
+        setTasks(state, action: PayloadAction<SetTasksActionPayload>) {
+            state.tasks = action.payload.tasks;
+            state.pagination = action.payload.pagination;
+            state.sort = action.payload.sort;
+        },
+        updateTask(state, action: PayloadAction<ITask>) {
+            state.tasks = state.tasks.map(t => t.id === action.payload.id ? action.payload : t)
+        },
+        deleteTask(state, action: PayloadAction<ITask>) {
+            state.tasks = state.tasks.filter(t => t.id !== action.payload.id);
+        }
     }
-}
+})
+
+export default taskSlice.reducer;

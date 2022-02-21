@@ -6,6 +6,7 @@ import {useActions} from "../hooks/useActions";
 import {useInput} from '../hooks/useInput';
 import {RegisterData} from "../store/reducers/auth/types";
 
+
 const RegisterForm: FC = () => {
     const {isLoading, error} = useTypedSelector(state => state.auth);
     const {register} = useActions();

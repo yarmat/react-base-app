@@ -1,4 +1,4 @@
-# React Base App - Task Manager (redux)
+# React Base App - Task Manager (redux-toolkit)
 
 ## Available Commands
 
