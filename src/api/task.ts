@@ -2,17 +2,66 @@ import axios from "axios";
 import {AxiosResponse} from "axios";
 import ITask from "../models/ITask";
 import {TaskStateSort} from "../store/reducers/task/types";
+import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/dist/query/react";
 
-export interface TaskStoreApiPayload  {
+
+export interface TaskStoreApiPayload {
     name: string,
     user_id: number
 }
 
-export interface TaskUpdateApiPayload  {
+export interface TaskUpdateApiPayload {
     id: number,
     name: string,
     user_id: number
 }
+
+export interface TaskGetByUserIdParams {
+    userId: number,
+    page: number,
+    limit: number,
+    sortOrder: TaskStateSort[] | []
+}
+
+
+export const taskAPI = createApi({
+    reducerPath: 'tasks',
+    baseQuery: fetchBaseQuery({baseUrl: 'http://localhost:3001'}),
+    endpoints: (build) => ({
+        getByUserId: build.query<ITask[], TaskGetByUserIdParams>({
+            query: ({
+                        userId,
+                        page = 1,
+                        limit = 10,
+                        sortOrder = []
+                    }: TaskGetByUserIdParams) => ({
+                url: 'tasks',
+                params: () => {
+                    let baseParams = {
+                        _page: page,
+                        _limit: limit,
+                        userId: userId,
+                    };
+
+                    let sortOrderParams = {};
+
+                    if (sortOrder.length > 0) {
+                        const sort = sortOrder.map(i => i.name).join(',');
+                        const order = sortOrder.map(i => i.order === 'ascend' ? 'asc' : 'desc').join(',');
+                        sortOrderParams = {
+                            _sort: sort,
+                            _order: order
+                        }
+                    }
+
+                    return {...baseParams, ...sortOrderParams};
+                }
+            })
+        })
+    })
+})
+
+export const { useGetByUserIdQuery } = taskAPI;
 
 export default class TaskApiService {
     static async getByUserId(

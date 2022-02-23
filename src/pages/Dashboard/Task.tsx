@@ -6,6 +6,7 @@ import TaskTable from "../../components/TaskTable";
 import ITask from "../../models/ITask";
 import TaskCreateModal from "../../components/TaskCreateModal";
 import TaskEditModal from "../../components/TaskEditModal";
+import {useGetByUserIdQuery} from "../../api/task";
 
 const Task:FC = () => {
     const {
