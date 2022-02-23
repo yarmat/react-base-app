@@ -2,36 +2,41 @@ import React, {FC} from 'react';
 import {Button, Space, Table} from "antd";
 import ITask from "../models/ITask";
 import {ColumnsType} from "antd/es/table";
-import {useTypedSelector} from "../hooks/useTypedSelector";
 import {FilterValue, TablePaginationConfig} from "antd/lib/table/interface";
-import {TaskStatePagination, TaskStateSort} from "../store/reducers/task/types";
+import {TaskSort} from "../api/task";
 
 interface TaskTableProps {
-    onTableChange: (pagination: TaskStatePagination, sort: TaskStateSort[]) => void,
+    isLoading: boolean,
+    tasks: ITask[],
+    pagination: TablePaginationConfig,
+    onTableChange: (pagination: TablePaginationConfig, sort: TaskSort[]) => void,
     onEditClicked: (task: ITask) => void,
     onDeleteClicked: (task: ITask) => void
 }
 
-const TaskTable: FC<TaskTableProps> = ({onTableChange, onEditClicked, onDeleteClicked}) => {
-    const {
+const TaskTable: FC<TaskTableProps> = (
+    {
+        isLoading,
         tasks,
         pagination,
-        isLoading,
-    } = useTypedSelector(state => state.task);
+        onTableChange,
+        onEditClicked,
+        onDeleteClicked
+    }) => {
 
     const handleTableChange = (
         pagination: TablePaginationConfig,
         filters: Record<string, FilterValue | null>,
         sorter: any
     ): void => {
-        const _sort: TaskStateSort[] = []
+        const _sort: TaskSort[] = []
         if (Array.isArray(sorter)) {
             sorter.forEach(s => {
                 if (s.order) {
                     _sort.push({
                         name: s.field,
                         order: s.order
-                    } as TaskStateSort)
+                    } as TaskSort)
                 }
             });
         } else {
@@ -39,12 +44,12 @@ const TaskTable: FC<TaskTableProps> = ({onTableChange, onEditClicked, onDeleteCl
                 _sort.push({
                     name: sorter.field,
                     order: sorter.order
-                } as TaskStateSort)
+                } as TaskSort)
             }
         }
 
         onTableChange(
-            pagination as TaskStatePagination,
+            pagination as TablePaginationConfig,
             _sort
         );
     };

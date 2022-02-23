@@ -1,35 +1,42 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Card, Alert, Button} from "antd";
+import {Card, Alert, Button, TablePaginationConfig} from "antd";
 import {useTypedSelector} from "../../hooks/useTypedSelector";
 import {useActions} from "../../hooks/useActions";
 import TaskTable from "../../components/TaskTable";
 import ITask from "../../models/ITask";
 import TaskCreateModal from "../../components/TaskCreateModal";
 import TaskEditModal from "../../components/TaskEditModal";
-import {useGetByUserIdQuery} from "../../api/task";
+import {TaskGetByUserIdParams, TaskSort, useGetByUserIdQuery} from "../../api/task";
 
 const Task:FC = () => {
-    const {
-        pagination,
-        sort,
-        error
-    } = useTypedSelector(state => state.task);
-
     const {user} = useTypedSelector(state => state.auth)
 
-    const {fetchTasksByUserID, storeTask, deleteTask, updateTask} = useActions();
+    const {storeTask, deleteTask, updateTask} = useActions();
+
+
+    const [pagination, setPagination] = useState<TablePaginationConfig>({
+        current: 1,
+        pageSize: 10,
+        total: 0
+    })
+
+    const [sort, setSort] = useState<TaskSort[]>([]);
+
+    const {data, isLoading, error} = useGetByUserIdQuery({
+        userId: user.id,
+        page: pagination.current,
+        limit: pagination.pageSize,
+        sortOrder: sort
+    } as TaskGetByUserIdParams)
 
     const [isVisibleTaskCreateModal, setIsVisibleTaskCreateModal] = useState(false);
     const [isVisibleTaskEditModal, setIsVisibleTaskEditModal] = useState(false);
     const [activeTask, setActiveTask] = useState<ITask>();
 
-    const fetchTasks = async (p = pagination, s = sort) => {
-        return await fetchTasksByUserID(user.id, p, s);
+    const onTableChange = (p = pagination, s = sort) => {
+        setPagination(p);
+        setSort(s);
     }
-
-    useEffect(() => {
-        fetchTasks();
-    }, []);
 
     const editClicked = (task: ITask) => {
         setActiveTask(task);
@@ -39,7 +46,6 @@ const Task:FC = () => {
     const deleteClicked = async (task: ITask) => {
         if (window.confirm('Are you sure?')) {
             await deleteTask(task);
-            await fetchTasks();
         }
     }
 
@@ -49,7 +55,6 @@ const Task:FC = () => {
             name: name,
             user_id: user.id
         });
-        await fetchTasks();
     };
 
     const onEditSubmit = async (name: string) => {
@@ -57,7 +62,6 @@ const Task:FC = () => {
             ...activeTask,
             name: name
         } as ITask);
-        await fetchTasks();
     };
 
     return (
@@ -68,11 +72,14 @@ const Task:FC = () => {
         }>
             {error && <Alert style={{marginBottom: 15}} message={error} type="error" />}
 
-            <TaskTable
-                onTableChange={fetchTasks}
+            {data && <TaskTable
+                isLoading={isLoading}
+                tasks={data}
+                pagination={pagination}
+                onTableChange={onTableChange}
                 onEditClicked={editClicked}
                 onDeleteClicked={deleteClicked}
-            />
+            /> }
 
             <TaskCreateModal
                 isVisible={isVisibleTaskCreateModal}

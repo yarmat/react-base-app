@@ -2,8 +2,7 @@ import axios from "axios";
 import {AxiosResponse} from "axios";
 import ITask from "../models/ITask";
 import {TaskStateSort} from "../store/reducers/task/types";
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/dist/query/react";
-
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export interface TaskStoreApiPayload {
     name: string,
@@ -20,9 +19,13 @@ export interface TaskGetByUserIdParams {
     userId: number,
     page: number,
     limit: number,
-    sortOrder: TaskStateSort[] | []
+    sortOrder: TaskSort[] | []
 }
 
+export interface TaskSort {
+    name: string,
+    order: 'ascend' | 'descend'
+}
 
 export const taskAPI = createApi({
     reducerPath: 'tasks',
@@ -53,7 +56,7 @@ export const taskAPI = createApi({
                             _order: order
                         }
                     }
-
+                    console.log({...baseParams, ...sortOrderParams});
                     return {...baseParams, ...sortOrderParams};
                 }
             })
